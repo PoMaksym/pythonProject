@@ -7,13 +7,8 @@ from selenium.webdriver.common.by import By
 
 
 def random():
-    random_username = (''.join(choice(ascii_uppercase) for i in range(12)))
-    return random_username
-
-
-def random_email():
-    random_email = (''.join(choice(ascii_uppercase) for i in range(12))) + "@gmail.com"
-    return random_email
+    random_string = (''.join(choice(ascii_uppercase) for i in range(12)))
+    return random_string
 
 
 class TestStartPage:
@@ -26,17 +21,21 @@ class TestStartPage:
         driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
 
         sleep(1)
-
+        # Fill username
         username = driver.find_element(by=By.XPATH, value='.//*[@id="username-register"]')
-        print(username.send_keys())
+        username.clear()
         username.send_keys(random())
         sleep(1)
 
+        # Fill email
         email = driver.find_element(by=By.XPATH, value='.//*[@id="email-register"]')
-        email.send_keys(random_email())
+        email.clear()
+        email.send_keys(f"{random()}@gmail.com")
         sleep(1)
 
+        # Fill password
         password = driver.find_element(by=By.XPATH, value='.//*[@id="password-register"]')
+        password.clear()
         password.send_keys('Testfr7777test')
         sleep(1)
 
@@ -47,6 +46,7 @@ class TestStartPage:
         # Verify sign up successful
         verify_element = driver.find_element(by=By.XPATH, value='.//*/button[contains(text(),"Sign Out")]')
         assert verify_element.text == "Sign Out"
+
 
         # Close driver
         driver.close()
@@ -59,18 +59,24 @@ class TestStartPage:
 
         sleep(1)
 
+        # Leave usernames field clear
         username = driver.find_element(by=By.XPATH, value='.//*[@id="username-register"]')
-        username.send_keys('')
+        username.clear()
         sleep(1)
 
+        # Fill email
         email = driver.find_element(by=By.XPATH, value='.//*[@id="email-register"]')
-        email.send_keys(random_email())
+        email.clear()
+        email.send_keys(f"{random()}@gmail.com")
         sleep(1)
 
+        # Fill password
         password = driver.find_element(by=By.XPATH, value='.//*[@id="password-register"]')
+        password.clear()
         password.send_keys('Testfr7777test')
         sleep(1)
 
+        # Click button
         button = driver.find_element(by=By.XPATH, value='.//*[@type="submit"]')
         button.click()
         sleep(1)
@@ -79,7 +85,7 @@ class TestStartPage:
         verify_element = driver.find_element(by=By.XPATH,
                                              value='.//*/div[contains(text(),"Username must be at least 3 characters")]')
         assert verify_element.text == "Username must be at least 3 characters."
-
+        assert driver.find_element(by=By.XPATH, value=".//strong").text == username
         driver.close()
 
     def test_empty_email(self):
@@ -91,11 +97,12 @@ class TestStartPage:
         sleep(1)
 
         username = driver.find_element(by=By.XPATH, value='.//*[@id="username-register"]')
+        username.clear()
         username.send_keys(random())
         sleep(1)
 
         email = driver.find_element(by=By.XPATH, value='.//*[@id="email-register"]')
-        email.send_keys('')
+        email.clear()
         sleep(1)
 
         password = driver.find_element(by=By.XPATH, value='.//*[@id="password-register"]')
