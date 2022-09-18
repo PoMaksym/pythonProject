@@ -44,6 +44,7 @@ class TestStartPage:
         password.send_keys('Testfr7777test')
         sleep(1)
 
+        # Click button
         button = driver.find_element(by=By.XPATH, value='.//*[@type="submit"]')
         button.click()
         sleep(1)
