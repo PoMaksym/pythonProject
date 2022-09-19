@@ -13,7 +13,7 @@ def random():
 
 
 class TestStartPage:
-    log = logging.getLogger("[StartPage]")
+    log = logging.getLogger("StartPage")
 
     def test_sign_up_successful(self):
         # Create driver
