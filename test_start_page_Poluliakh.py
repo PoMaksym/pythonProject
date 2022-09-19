@@ -1,3 +1,4 @@
+import logging
 from random import choice
 from string import ascii_uppercase
 from time import sleep
@@ -12,6 +13,7 @@ def random():
 
 
 class TestStartPage:
+    log = logging.getLogger("[StartPage]")
 
     def test_sign_up_successful(self):
         # Create driver
@@ -19,7 +21,7 @@ class TestStartPage:
 
         # Open page
         driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
-
+        self.log.info("Open start page")
         sleep(1)
 
         # Fill username
@@ -27,6 +29,7 @@ class TestStartPage:
         username = driver.find_element(by=By.XPATH, value='.//*[@id="username-register"]')
         username.clear()
         username.send_keys(user)
+
         sleep(1)
 
         # Fill email
@@ -41,6 +44,7 @@ class TestStartPage:
         password.send_keys('Testfr7777test')
         sleep(1)
 
+        # Click button
         button = driver.find_element(by=By.XPATH, value='.//*[@type="submit"]')
         button.click()
         sleep(1)
@@ -49,7 +53,7 @@ class TestStartPage:
         verify_element = driver.find_element(by=By.XPATH, value='.//*/button[contains(text(),"Sign Out")]')
         assert verify_element.text == "Sign Out"
         assert driver.find_element(by=By.XPATH, value=".//strong").text == user.lower()
-
+        self.log.info("Verify sign up")
 
         # Close driver
         driver.close()
@@ -59,7 +63,7 @@ class TestStartPage:
 
         # Open page
         driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
-
+        self.log.info("Open start page")
         sleep(1)
 
         # Leave usernames field clear
@@ -96,7 +100,7 @@ class TestStartPage:
 
         # Open page
         driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
-
+        self.log.info("Open start page")
         sleep(1)
 
         username = driver.find_element(by=By.XPATH, value='.//*[@id="username-register"]')
@@ -128,7 +132,7 @@ class TestStartPage:
 
         # Open page
         driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
-
+        self.log.info("Open start page")
         sleep(1)
 
         username = driver.find_element(by=By.XPATH, value='.//*[@id="username-register"]')
@@ -162,6 +166,7 @@ class TestStartPage:
 
         # Open page
         driver.get("https://qa-complex-app-for-testing.herokuapp.com/")
+        self.log.info("Open start page")
 
         # Fill login
         login = driver.find_element(by=By.XPATH, value=".//input[@placeholder='Username']")
@@ -181,8 +186,10 @@ class TestStartPage:
         sleep(1)
 
         # Verify sign in
+        self.log.info("Verify Sign in")
         hello_message = driver.find_element(by=By.XPATH, value=".//h2")
         assert hello_message.text == f"Hello {'MaxP'.lower()}, your feed is empty."
+
 
         # Close driver
         driver.close()
@@ -190,6 +197,7 @@ class TestStartPage:
     def test_signin_empty(self):
         # Create driver
         driver = webdriver.Chrome(r"C:\Users\HomeWork\PycharmProjects\pythonProject\chromedriver.exe")
+        self.log.info("Open start page")
 
         # Open page
         driver.get("https://qa-complex-app-for-testing.herokuapp.com/")
@@ -210,5 +218,7 @@ class TestStartPage:
         sleep(1)
 
         # Verify error
+
         error_element = driver.find_element(by=By.XPATH, value=".//div[@class='alert alert-danger text-center']")
+        self.log.info("Verify sign in")
         assert error_element.text == "Invalid username / pasword", f"Actual message: {error_element.text}"
