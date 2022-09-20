@@ -95,6 +95,44 @@ class TestStartPage:
 
         driver.close()
 
+    def test_spaces_username(self):
+        driver = webdriver.Chrome(r"C:\Users\HomeWork\PycharmProjects\pythonProject\chromedriver.exe")
+
+        # Open page
+        driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
+        self.log.info("Open start page")
+        sleep(1)
+
+        # Leave usernames with spaces
+        username = driver.find_element(by=By.XPATH, value='.//*[@id="username-register"]')
+        username.clear()
+        username.send_keys("          ")
+        sleep(1)
+
+        # Fill email
+        email = driver.find_element(by=By.XPATH, value='.//*[@id="email-register"]')
+        email.clear()
+        email.send_keys(f"{random()}@gmail.com")
+        sleep(1)
+
+        # Fill password
+        password = driver.find_element(by=By.XPATH, value='.//*[@id="password-register"]')
+        password.clear()
+        password.send_keys('Testfr7777test')
+        sleep(1)
+
+        # Click button
+        button = driver.find_element(by=By.XPATH, value='.//*[@type="submit"]')
+        button.click()
+        sleep(1)
+
+        # Verify sign up successful
+        verify_element = driver.find_element(by=By.XPATH,
+                                             value='.//*/div[contains(text(),"Username can only contain letters and numbers.")]')
+        assert verify_element.text == "Username can only contain letters and numbers."
+
+        driver.close()
+
     def test_empty_email(self):
         driver = webdriver.Chrome(r"C:\Users\HomeWork\PycharmProjects\pythonProject\chromedriver.exe")
 
