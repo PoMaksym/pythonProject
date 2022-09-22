@@ -1,262 +1,95 @@
 import logging
-from random import choice
-from string import ascii_uppercase
-from time import sleep
 
+import pytest
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 
-
-def random():
-    random_string = (''.join(choice(ascii_uppercase) for i in range(12)))
-    return random_string
+from constants.base import DRIVER_PATH, BASE_URL
+from pages.start_page import StartPage
+from pages.utils import random_str, random_num
 
 
 class TestStartPage:
     log = logging.getLogger("[StartPage]")
 
-    def test_sign_up_successful(self):
-        # Create driver
-        driver = webdriver.Chrome(r"C:\Users\HomeWork\PycharmProjects\pythonProject\chromedriver.exe")
-
-        # Open page
-        driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
-        self.log.info("Open start page")
-        sleep(1)
-
-        # Fill username
-        user = random()
-        username = driver.find_element(by=By.XPATH, value='.//*[@id="username-register"]')
-        username.clear()
-        username.send_keys(user)
-
-        sleep(1)
-
-        # Fill email
-        email = driver.find_element(by=By.XPATH, value='.//*[@id="email-register"]')
-        email.clear()
-        email.send_keys(f"{random()}@gmail.com")
-        sleep(1)
-
-        # Fill password
-        password = driver.find_element(by=By.XPATH, value='.//*[@id="password-register"]')
-        password.clear()
-        password.send_keys('Testfr7777test')
-        sleep(1)
-
-        # Click button
-        button = driver.find_element(by=By.XPATH, value='.//*[@type="submit"]')
-        button.click()
-        sleep(1)
-
-        # Verify sign up successful
-        verify_element = driver.find_element(by=By.XPATH, value='.//*/button[contains(text(),"Sign Out")]')
-        assert verify_element.text == "Sign Out"
-        assert driver.find_element(by=By.XPATH, value=".//strong").text == user.lower()
-        self.log.info("Verify sign up")
-
-        # Close driver
+    @pytest.fixture(scope="function")
+    def start_page(self):
+        # Pre-conditions
+        driver = webdriver.Chrome(DRIVER_PATH)
+        driver.get(BASE_URL)
+        # Steps
+        yield StartPage(driver)
+        # Post-conditions
         driver.close()
 
-    def test_empty_username(self):
-        driver = webdriver.Chrome(r"C:\Users\HomeWork\PycharmProjects\pythonProject\chromedriver.exe")
+    def test_register(self, start_page):
+        """
+        - Pre-conditions:
+            - Open start page
+        - Steps:
+            - Fill email, login and password fields
+            - Click on Sign Up button
+            - Verify registration is successful
+        """
+        # Prepare data
+        user = random_str()
+        username_value = f"{user}{random_num()}"
+        email_value = f"{user}{random_num()}@gmail.com"
+        password_value = f"{random_str(6)}{random_num()}"
 
-        # Open page
-        driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
-        self.log.info("Open start page")
-        sleep(1)
+        # Sign Up as a user
+        start_page.sign_up(username_value, email_value, password_value)
+        self.log.info("Signed Up as user %s", username_value)
 
-        # Leave usernames field clear
-        username = driver.find_element(by=By.XPATH, value='.//*[@id="username-register"]')
-        username.clear()
-        sleep(1)
+        # Verify success message
+        start_page.verify_success_sign_up(username_value)
+        self.log.info("Hello message was verified")
 
-        # Fill email
-        email = driver.find_element(by=By.XPATH, value='.//*[@id="email-register"]')
-        email.clear()
-        email.send_keys(f"{random()}@gmail.com")
-        sleep(1)
+    def test_sign_in(self, start_page):
+        """Pre-conditions:
+        - open start page
+        Steps:
+        - Fill login and password fields
+        - Click Sign in
+        - Verify registration"""
 
-        # Fill password
-        password = driver.find_element(by=By.XPATH, value='.//*[@id="password-register"]')
-        password.clear()
-        password.send_keys('Testfr7777test')
-        sleep(1)
+        start_page.sign_in(username='Aa1234', password="test@test44.com")
+        start_page.verify_sign_in(username='Aa1234', password='test@test44.com')
 
-        # Click button
-        button = driver.find_element(by=By.XPATH, value='.//*[@type="submit"]')
-        button.click()
-        sleep(1)
-
-        # Verify sign up successful
-        verify_element = driver.find_element(by=By.XPATH,
-                                             value='.//*/div[contains(text(),"Username must be at least 3 characters")]')
-        assert verify_element.text == "Username must be at least 3 characters."
-
-        driver.close()
-
-    def test_spaces_username(self):
-        driver = webdriver.Chrome(r"C:\Users\HomeWork\PycharmProjects\pythonProject\chromedriver.exe")
-
-        # Open page
-        driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
-        self.log.info("Open start page")
-        sleep(1)
-
-        # Leave usernames with spaces
-        username = driver.find_element(by=By.XPATH, value='.//*[@id="username-register"]')
-        username.clear()
-        username.send_keys("          ")
-        sleep(1)
-
-        # Fill email
-        email = driver.find_element(by=By.XPATH, value='.//*[@id="email-register"]')
-        email.clear()
-        email.send_keys(f"{random()}@gmail.com")
-        sleep(1)
-
-        # Fill password
-        password = driver.find_element(by=By.XPATH, value='.//*[@id="password-register"]')
-        password.clear()
-        password.send_keys('Testfr7777test')
-        sleep(1)
-
-        # Click button
-        button = driver.find_element(by=By.XPATH, value='.//*[@type="submit"]')
-        button.click()
-        sleep(1)
-
-        # Verify sign up successful
-        verify_element = driver.find_element(by=By.XPATH,
-                                             value='.//*/div[contains(text(),"Username can only contain letters and numbers.")]')
-        assert verify_element.text == "Username can only contain letters and numbers."
-
-        driver.close()
-
-    def test_empty_email(self):
-        driver = webdriver.Chrome(r"C:\Users\HomeWork\PycharmProjects\pythonProject\chromedriver.exe")
-
-        # Open page
-        driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
-        self.log.info("Open start page")
-        sleep(1)
-
-        username = driver.find_element(by=By.XPATH, value='.//*[@id="username-register"]')
-        username.clear()
-        username.send_keys(random())
-        sleep(1)
-
-        email = driver.find_element(by=By.XPATH, value='.//*[@id="email-register"]')
-        email.clear()
-        sleep(1)
-
-        password = driver.find_element(by=By.XPATH, value='.//*[@id="password-register"]')
-        password.send_keys('Testfr7777test')
-        sleep(1)
-
-        button = driver.find_element(by=By.XPATH, value='.//*[@type="submit"]')
-        button.click()
-        sleep(1)
-
-        # Verify sign up successful
-        verify_element = driver.find_element(by=By.XPATH,
-                                             value='.//*/div[contains(text(),"You must provide a valid email address.")]')
-        assert verify_element.text == "You must provide a valid email address."
-
-        driver.close()
-
-    def test_empty_password(self):
-        driver = webdriver.Chrome(r"C:\Users\HomeWork\PycharmProjects\pythonProject\chromedriver.exe")
-
-        # Open page
-        driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
-        self.log.info("Open start page")
-        sleep(1)
-
-        username = driver.find_element(by=By.XPATH, value='.//*[@id="username-register"]')
-        username.clear()
-        username.send_keys(random())
-        sleep(1)
-
-        email = driver.find_element(by=By.XPATH, value='.//*[@id="email-register"]')
-        email.clear()
-        email.send_keys(f"{random()}@gmail.com")
-        sleep(1)
-
-        password = driver.find_element(by=By.XPATH, value='.//*[@id="password-register"]')
-        password.clear()
-        sleep(1)
-
-        button = driver.find_element(by=By.XPATH, value='.//*[@type="submit"]')
-        button.click()
-        sleep(1)
-
-        # Verify sign up successful
-        verify_element = driver.find_element(by=By.XPATH,
-                                             value='.//*/div[contains(text(),"Password must be at least 12 characters.")]')
-        assert verify_element.text == "Password must be at least 12 characters."
-
-        driver.close()
-
-    def test_signin_successful(self):
-        # Create driver
-        driver = webdriver.Chrome(r"C:\Users\HomeWork\PycharmProjects\pythonProject\chromedriver.exe")
-
-        # Open page
-        driver.get("https://qa-complex-app-for-testing.herokuapp.com/")
-        self.log.info("Open start page")
-
-        # Fill login
-        login = driver.find_element(by=By.XPATH, value=".//input[@placeholder='Username']")
-        login.clear()
-        login.send_keys("MaxP")
-        sleep(1)
-
-        # Fill password
-        password = driver.find_element(by=By.XPATH, value=".//input[@placeholder='Password']")
-        password.clear()
-        password.send_keys("Test7777test")
-        sleep(1)
-
-        # Click button
-        button = driver.find_element(by=By.XPATH, value=".//button[text()='Sign In']")
-        button.click()
-        sleep(1)
-
-        # Verify sign in
-        self.log.info("Verify Sign in")
-        hello_message = driver.find_element(by=By.XPATH, value=".//h2")
-        assert hello_message.text == f"Hello {'MaxP'.lower()}, your feed is empty."
-
-
-        # Close driver
-        driver.close()
-
-    def test_signin_empty(self):
-        # Create driver
-        driver = webdriver.Chrome(r"C:\Users\HomeWork\PycharmProjects\pythonProject\chromedriver.exe")
-        self.log.info("Open start page")
-
-        # Open page
-        driver.get("https://qa-complex-app-for-testing.herokuapp.com/")
-
-        # Empty login
-        login = driver.find_element(by=By.XPATH, value=".//input[@placeholder='Username']")
-        login.clear()
-        sleep(1)
-
-        # Empty password
-        password = driver.find_element(by=By.XPATH, value=".//input[@placeholder='Password']")
-        password.clear()
-        sleep(1)
-
-        # Click button
-        button = driver.find_element(by=By.XPATH, value=".//button[text()='Sign In']")
-        button.click()
-        sleep(1)
-
+    def test_sign_up_empty_username(self, start_page):
+        user = random_str()
+        username_value = ""
+        email_value = f"{user}{random_num()}@gmail.com"
+        password_value = f"{random_str(6)}{random_num()}"
+        # Fill fields
+        start_page.sign_up(username_value, email_value, password_value)
         # Verify error
+        start_page.empty_username_sign_up()
 
-        error_element = driver.find_element(by=By.XPATH, value=".//div[@class='alert alert-danger text-center']")
-        self.log.info("Verify sign in")
-        assert error_element.text == "Invalid username / pasword", f"Actual message: {error_element.text}"
+    def test_sign_up_empty_email(self, start_page):
+        user = random_str()
+        username_value = f"{user}{random_num()}"
+        email_value = ""
+        password_value = f"{random_str(6)}{random_num()}"
+
+        # Fill fields
+        start_page.sign_up(username_value, email_value, password_value)
+        # Verify error
+        start_page.empty_email_sign_up()
+
+    def test_sign_up_empty_password(self, start_page):
+        user = random_str()
+        username_value = f"{user}{random_num()}"
+        email_value = f"{user}{random_num()}@gmail.com"
+        password_value = ""
+
+        start_page.sign_up(username_value, email_value, password_value)
+        start_page.empty_password_sign_up()
+
+    def test_sign_up_space_username(self, start_page):
+        user = random_str()
+        username_value = "               "
+        email_value = f"{user}{random_num()}@gmail.com"
+        password_value = f"{random_str(6)}{random_num()}"
+
+        start_page.sign_up(username_value, email_value, password_value)
+        start_page.space_username_sign_up()
