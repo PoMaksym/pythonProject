@@ -21,7 +21,7 @@ class StartPageConstants:
     SIGN_UP_SPACE_USERNAME_ERROR_TEXT = "Username can only contain letters and numbers."
     SIGN_UP_SPACE_USERNAME_ERROR_XPATH = ".//*/div[contains(text(),'Username can only contain letters and numbers.')]"
 
-    'TODO: this is actually next page'
     HELLO_MESSAGE_XPATH = ".//h2"
     HELLO_MESSAGE_USERNAME_XPATH = ".//strong"
     HELLO_MESSAGE_TEXT = "Hello {username}, your feed is empty."
+
