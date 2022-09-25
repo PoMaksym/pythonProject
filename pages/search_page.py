@@ -18,3 +18,7 @@ class SearchPage(BasePage):
         """Verify error when unsuccessful search"""
         assert self.get_element_text(self.constants.SEARCH_UNSUCCESSFUL) == self.constants.SEARCH_UNSUCCESSFUL_TEXT, \
             f"Actual: {self.get_element_text(self.constants.SEARCH_UNSUCCESSFUL)}"
+
+    def verify_successful_search(self):
+        """Verify error when successful search"""
+        assert self.is_exists(self.constants.SEARCH_SUCCESSFUL_XPATH)

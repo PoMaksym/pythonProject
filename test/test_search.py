@@ -37,6 +37,27 @@ class TestSearch:
              - Sign Up/Sign In as an user
              - Steps:
                 - Navigate to Search Page
+                - Type random text
+                - Verify the result
+        """
+        # Navigatte to search page
+        search = hello_page.header.navigate_to_search_page()
+        self.log.info("Moved to Search page")
+
+        # Type text
+        search.search_text(placeholder=random_str(13))
+        self.log.info("Typing text")
+
+        # Verify the result
+        search.verify_unsuccessful_search()
+        self.log.info("Message was verified")
+
+    def test_successful_search(self, hello_page):
+        """
+         - Pre-conditions:
+             - Sign Up/Sign In as an user
+             - Steps:
+                - Navigate to Search Page
                 - Type text
                 - Verify the result
         """
@@ -45,9 +66,9 @@ class TestSearch:
         self.log.info("Moved to Search page")
 
         # Type text
-        search.search_text(placeholder=random_str(15))
+        search.search_text(placeholder='test')
         self.log.info("Typing text")
 
         # Verify the result
-        search.verify_unsuccessful_search()
+        search.verify_successful_search()
         self.log.info("Message was verified")
