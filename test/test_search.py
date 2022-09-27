@@ -4,6 +4,7 @@ import pytest
 from selenium import webdriver
 
 from constants.base import DRIVER_PATH, BASE_URL
+from pages.start_page import StartPage
 from pages.utils import random_str, random_num
 
 
@@ -17,7 +18,6 @@ class TestSearch:
         driver.get(BASE_URL)
         driver.implicitly_wait(1)
         # Steps
-        from pages.start_page import StartPage
         yield StartPage(driver)
         # Post-conditions
         driver.close()
@@ -40,16 +40,16 @@ class TestSearch:
                 - Type random text
                 - Verify the result
         """
-        # Navigatte to search page
-        search = hello_page.header.navigate_to_search_page()
-        self.log.info("Moved to Search page")
+        # Navigate to search icon
+        hello_page.header.navigate_to_search_icon()
+        self.log.info("Moved to Search icon")
 
         # Type text
-        search.search_text(placeholder=random_str(13))
+        hello_page.header.search_fill_text(placeholder=random_str(13))
         self.log.info("Typing text")
 
         # Verify the result
-        search.verify_unsuccessful_search()
+        hello_page.header.verify_unsuccessful_search()
         self.log.info("Message was verified")
 
     def test_successful_search(self, hello_page):
@@ -62,13 +62,13 @@ class TestSearch:
                 - Verify the result
         """
         # Navigatte to search page
-        search = hello_page.header.navigate_to_search_page()
+        hello_page.header.navigate_to_search_icon()
         self.log.info("Moved to Search page")
 
         # Type text
-        search.search_text(placeholder='test')
+        hello_page.header.search_fill_text(placeholder='test')
         self.log.info("Typing text")
 
         # Verify the result
-        search.verify_successful_search()
+        hello_page.header.verify_successful_search()
         self.log.info("Message was verified")

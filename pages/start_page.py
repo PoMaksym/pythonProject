@@ -68,7 +68,7 @@ class StartPage(BasePage):
     def verify_success_sign_up(self, username):
         """Verify success Sign Up using hello message"""
         username = username.lower()
-        assert self.get_element_text(self.constants.H) == self.constants.HELLO_MESSAGE_TEXT.format(
+        assert self.get_element_text(self.constants.HELLO_MESSAGE_XPATH) == self.constants.HELLO_MESSAGE_TEXT.format(
             username=username)
         assert not self.is_exists(self.constants.SIGN_UP_BUTTON_XPATH)
         assert self.get_element_text(self.constants.HELLO_MESSAGE_USERNAME_XPATH) == username, \
