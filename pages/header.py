@@ -1,7 +1,7 @@
-from selenium.webdriver.common.keys import Keys
-
 from constants.header import HeaderConsts
 from pages.base_page import BasePage
+from pages.chat import Chat
+from pages.profile import ProfileHeader
 from pages.utils import log_decorator
 
 
@@ -42,16 +42,15 @@ class Header(BasePage):
     def open_chat(self):
         """Open chat"""
         self.click(self.constants.CHAT_ICON_XPATH)
+        return Chat(self.driver)
 
     @log_decorator
-    def verify_chat_open(self):
-        pass
+    def open_profile(self):
+        """Open profile"""
+        self.click(self.constants.PROFILE_ICON_XPATH)
+        return ProfileHeader(self.driver)
 
     @log_decorator
-    def type_message(self, value='test123'):
-        self.fill_field(self.constants.TYPE_MESSAGE_XPATH, value=value + Keys.ENTER)
-
-    @log_decorator
-    def verify_message(self):
-        assert self.get_element_text(xpath=self.constants.VERIFY_MESSAGE_XPATH) == self.constants.VERIFY_MESSAGE_TEXT, \
-            f"Actual: {self.get_element_text(xpath=self.constants.VERIFY_MESSAGE_XPATH)}"
+    def profile_opened_verify(self, username):
+        assert self.get_element_text(self.constants.VERIFY_PROFILE_XPATH) == username, \
+            f"Actual message: {self.get_element_text(self.constants.VERIFY_PROFILE_XPATH)}"

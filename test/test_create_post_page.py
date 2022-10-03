@@ -38,12 +38,9 @@ class TestCreatePostPage:
         """
         # Navigate to create Post Page
         create_post_page = hello_page.header.navigate_to_create_post_page()
-        self.log.info("Moved to Create Post Page")
 
         # Create Post
         create_post_page.create_post(title=random_str(15), body=random_str(150))
-        self.log.info("Post created")
 
         # Verify the result
         create_post_page.verify_successfully_created()
-        self.log.info("Message was verified")

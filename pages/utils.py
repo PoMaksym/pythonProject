@@ -79,5 +79,6 @@ class User:
         self.password = f"{random_str(6)}{random_num()}" if not password else password
 
     def sign_in_user(self):
+        """Sign in with valid data"""
         self.username = 'usermax'
         self.password = 'usermaxusermax'

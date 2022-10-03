@@ -1,36 +1,28 @@
-from time import sleep
-
 import pytest
-from selenium import webdriver
 
-from constants.base import DRIVER_PATH, BASE_URL
-from pages.start_page import StartPage
-from pages.utils import User
+from pages.utils import random_str
 
 
 class TestChat:
-    @pytest.fixture(scope="function")
-    def start_page(self):
-        # Pre-conditions
-        driver = webdriver.Chrome(DRIVER_PATH)
-        driver.get(BASE_URL)
-        driver.implicitly_wait(1)
-        # Steps
-        yield StartPage(driver)
-        # Post-conditions
-        driver.close()
 
     @pytest.fixture()
-    def hello_page(self, start_page):
+    def hello_page(self, start_page, random_user):
         """Sign Up as the user and return the page"""
-        user = User()
-        user.fill_data()
-        return start_page.sign_up_and_verify(user)
+        return start_page.sign_up_and_verify(random_user)
 
     def test_open_chat(self, hello_page):
-        hello_page.header.open_chat()
-
-        hello_page.header.type_message(value='test123')
-        sleep(5)
-
-        hello_page.header.verify_message()
+        """
+        - Pre-conditions:
+            - Sign Up/Sign In as an user
+        - Steps:
+            - Open chat
+            - Send message
+            - Verify message
+        """
+        # Open chat
+        chat = hello_page.header.open_chat()
+        # Send message
+        message = random_str(15)
+        chat.type_message(message)
+        # Verify message
+        chat.verify_message(message)

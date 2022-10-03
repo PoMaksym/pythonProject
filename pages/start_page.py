@@ -105,3 +105,10 @@ class StartPage(BasePage):
         assert self.get_element_text(
             self.constants.SIGN_UP_SPACE_USERNAME_ERROR_XPATH) == self.constants.SIGN_UP_SPACE_USERNAME_ERROR_TEXT, \
             f"Actual message: {self.get_element_text(self.constants.SIGN_UP_EMPTY_PASSWORD_ERROR_XPATH)}"
+
+    @log_decorator
+    def verify_used_email(self):
+        """Verify error with used email"""
+        assert self.get_element_text(
+            self.constants.SIGN_UP_USED_EMAIL_ERROR_XPATH) == self.constants.SIGN_UP_USED_EMAIL_ERROR_TEXT, \
+            f"Actual message: {self.get_element_text(self.constants.SIGN_UP_USED_EMAIL_ERROR_XPATH)}"

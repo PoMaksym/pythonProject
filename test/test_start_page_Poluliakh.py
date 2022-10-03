@@ -28,25 +28,61 @@ class TestStartPage:
         start_page.verify_sign_in(username=user.username, password=user.password)
 
     def test_sign_up_empty_username(self, start_page, random_user):
+        """Pre-conditions:
+             - open start page
+             Steps:
+             - Fill email and password fields
+             - Click Sign up
+             - Verify registration"""
         user = random_user
         user.username = ""
         start_page.sign_up(user)
         start_page.empty_username_sign_up()
 
     def test_sign_up_empty_email(self, start_page, random_user):
+        """Pre-conditions:
+             - open start page
+             Steps:
+             - Fill username and password fields
+             - Click Sign up
+             - Verify registration"""
         user = random_user
         user.email = ""
         start_page.sign_up(user)
         start_page.empty_email_sign_up()
 
     def test_sign_up_empty_password(self, start_page, random_user):
+        """Pre-conditions:
+                 - open start page
+                 Steps:
+                 - Fill username and email fields
+                 - Click Sign up
+                 - Verify registration"""
         user = random_user
         user.password = ""
         start_page.sign_up(user)
         start_page.empty_password_sign_up()
 
     def test_sign_up_space_username(self, start_page, random_user):
+        """Pre-conditions:
+                 - open start page
+                 Steps:
+                 - Fill username with spaces
+                 - Click Sign up
+                 - Verify registration"""
         user = random_user
         user.username = "                  "
         start_page.sign_up(user)
         start_page.space_username_sign_up()
+
+    def test_signup_used_email(self, start_page, random_user):
+        """Pre-conditions:
+                 - open start page
+                 Steps:
+                 - Fill email field with used eamil
+                 - Click Sign up
+                 - Verify registration"""
+        user = random_user
+        user.email = "test@test.com"
+        start_page.sign_up(user)
+        start_page.verify_used_email()

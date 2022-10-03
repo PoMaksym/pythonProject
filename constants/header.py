@@ -9,3 +9,5 @@ class HeaderConsts:
     TYPE_MESSAGE_XPATH = './/input[@placeholder="Type a message…"]'
     VERIFY_MESSAGE_XPATH = './/div[@class="chat-message-inner"][text()="test123"]'
     VERIFY_MESSAGE_TEXT = "test123"
+    PROFILE_ICON_XPATH = './/*[@class="mr-2"]'
+    VERIFY_PROFILE_XPATH = './/h2'

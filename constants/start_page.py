@@ -20,8 +20,9 @@ class StartPageConstants:
     SIGN_UP_EMPTY_PASSWORD_ERROR_TEXT = "Password must be at least 12 characters."
     SIGN_UP_SPACE_USERNAME_ERROR_TEXT = "Username can only contain letters and numbers."
     SIGN_UP_SPACE_USERNAME_ERROR_XPATH = ".//*/div[contains(text(),'Username can only contain letters and numbers.')]"
+    SIGN_UP_USED_EMAIL_ERROR_XPATH = './/*/div[contains(text(),"That email is already being used.")]'
+    SIGN_UP_USED_EMAIL_ERROR_TEXT = 'That email is already being used.'
 
     HELLO_MESSAGE_XPATH = ".//h2"
     HELLO_MESSAGE_USERNAME_XPATH = ".//strong"
     HELLO_MESSAGE_TEXT = "Hello {username}, your feed is empty."
-
