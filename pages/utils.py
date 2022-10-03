@@ -50,3 +50,35 @@ def wait_until_ok(timeout=5, period=0.5):
         return wrapper
 
     return decorator
+
+
+def log_decorator(original_function):
+    """Logging actions using docstings"""
+
+    log = logging.getLogger("[LogDecorator]")
+
+    def wrapper(*args, **kwargs):
+        result = original_function(*args, **kwargs)
+        log.info(f"{original_function.__doc__}")
+        return result
+
+    return wrapper
+
+
+class User:
+    def __init__(self, username="", email="", password=""):
+        self.username = username
+        self.email = email
+        self.password = password
+
+    def fill_data(self, username="", email="", password=""):
+        """Fill fields with sample data"""
+        user = random_str()
+        self.username = f"{user}{random_num()}" if not username else username
+        self.email = f"{user}{random_num()}@gmail.com" if not email else email
+        self.password = f"{random_str(6)}{random_num()}" if not password else password
+
+    def sign_in_user(self):
+        """Sign in with valid data"""
+        self.username = 'usermax'
+        self.password = 'usermaxusermax'
